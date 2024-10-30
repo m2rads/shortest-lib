@@ -10,7 +10,7 @@ let config: ShortestConfig;
 
 export async function initialize() {
   config = await loadConfig();
-  // You can use config values in your test setup
+  // TODO: use config values in test setup
 }
 
 export function getConfig(): ShortestConfig {
