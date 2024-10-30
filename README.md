@@ -5,7 +5,7 @@ A modern, AI-powered testing framework for web applications.
 ## Features
 
 - Fluent API for writing expressive UI tests
-- ESM and TypeScript support
+- ESM, CJS, TS and JS support
 
 ## Quick Start
 
