@@ -1,14 +1,18 @@
 import { getConfig } from './index';
-import { AfterFunction, BeforeFunction, TestFunction } from './types';
+import { 
+  AfterFunction, 
+  BeforeFunction, 
+  TestFunction, 
+  ActionType, 
+  TestStep,
+  ActionParams 
+} from './types';
 
 export class UITestBuilder<T = void> {
     private path: string;
     private testName: string;
     private testFn?: TestFunction;
-    private beforeFn?: BeforeFunction;
-    private afterFn?: AfterFunction;
-    private expectations: any;
-    private params?: T;
+    private steps: TestStep[] = [];
   
     constructor(path: string) {
       this.path = path;
@@ -20,24 +24,50 @@ export class UITestBuilder<T = void> {
       return this;
     }
   
-    before(fn: BeforeFunction): this {
-      this.beforeFn = fn;
+    private addStep(type: TestStep['type'], action: string, payload?: any): this {
+      this.steps.push({ type, action, payload });
       return this;
     }
-  
-    given(params: T): this {
-      this.params = params;
-      return this;
+
+    before(actionOrFn: ActionType | BeforeFunction, payload?: ActionParams): this {
+      if (typeof actionOrFn === 'function') {
+        return this.addStep('BEFORE', 'EXECUTE_FUNCTION', actionOrFn);
+      }
+      if (typeof actionOrFn === 'string') {
+        return this.addStep('BEFORE', actionOrFn, payload);
+      }
+      return this.addStep('BEFORE', 'SET_STATE', actionOrFn);
     }
   
-    expect(expectations: any): this {
-      this.expectations = expectations;
-      return this;
+    given(actionOrState: ActionType, payload?: ActionParams): this {
+      if (typeof actionOrState === 'string') {
+        return this.addStep('GIVEN', actionOrState, payload);
+      }
+      return this.addStep('GIVEN', 'SET_STATE', actionOrState);
+    }
+
+    when(action: ActionType, payload?: ActionParams): this {
+      if (typeof action === 'string') {
+        return this.addStep('WHEN', action, payload);
+      }
+      return this.addStep('WHEN', 'SET_STATE', action);
     }
   
-    after(fn: AfterFunction): this {
-      this.afterFn = fn;
-      return this;
+    expect(actionOrExpectation: ActionType, payload?: ActionParams): this {
+      if (typeof actionOrExpectation === 'string') {
+        return this.addStep('EXPECT', actionOrExpectation, payload);
+      }
+      return this.addStep('EXPECT', 'ASSERT_STATE', actionOrExpectation);
+    }
+  
+    after(actionOrFn: ActionType | AfterFunction, payload?: ActionParams): this {
+      if (typeof actionOrFn === 'function') {
+        return this.addStep('AFTER', 'EXECUTE_FUNCTION', actionOrFn);
+      }
+      if (typeof actionOrFn === 'string') {
+        return this.addStep('AFTER', actionOrFn, payload);
+      }
+      return this.addStep('AFTER', 'SET_STATE', actionOrFn);
     }
   
     private getUrl(): string {

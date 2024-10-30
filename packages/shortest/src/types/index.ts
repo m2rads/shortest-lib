@@ -13,6 +13,14 @@ export interface BeforeAllFunction {
 export interface AfterAllFunction {
     (): Promise<void> | void;
 }
+
+export interface BeforeFunction {
+    (): Promise<void> | void;
+}
+  
+export interface AfterFunction {
+    (response: any): Promise<void> | void;
+}
   
 export interface TestSuite {
     name: string;
@@ -21,10 +29,16 @@ export interface TestSuite {
     tests: TestContext[];
 }
 
-export interface BeforeFunction {
-    (): Promise<void> | void;
+export type ActionType = string | Record<string, any>;
+export type ActionParams = void | ActionType;
+
+export interface TestAction {
+  type: string;
+  payload?: any;
 }
-  
-export interface AfterFunction {
-    (response: any): Promise<void> | void;
+
+export interface TestStep {
+  type: 'GIVEN' | 'WHEN' | 'EXPECT' | 'BEFORE' | 'AFTER';
+  action: string;
+  payload?: any;
 }
