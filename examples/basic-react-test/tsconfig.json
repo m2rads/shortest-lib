@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "shortest": ["../../packages/shortest/src"]
+    }
+  }
+}
