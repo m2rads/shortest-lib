@@ -12,6 +12,8 @@ A modern, AI-powered testing framework for web applications.
 ```bash
 # Install
 npm install shortest
+pnpm add shortest 
+yarn add shortest
 
 # Create config
 touch shortest.config.ts
