@@ -1,8 +1,21 @@
 import { TestSuite, BeforeAllFunction, AfterAllFunction } from './types';
+import { ShortestConfig } from './types/config';
+import { loadConfig } from './config-loader';
 
 export let currentSuite: TestSuite | null = null;
 export const beforeAllFns: BeforeAllFunction[] = [];
 export const afterAllFns: AfterAllFunction[] = [];
+
+let config: ShortestConfig;
+
+export async function initialize() {
+  config = await loadConfig();
+  // You can use config values in your test setup
+}
+
+export function getConfig(): ShortestConfig {
+  return config;
+}
 
 export function define(name: string, fn: () => void): void {
   currentSuite = {
@@ -34,3 +47,4 @@ export function afterAll(fn: AfterAllFunction): void {
 
 export { UITestBuilder } from './ui-test-builder';
 export * from './types';
+export * from './types/config';

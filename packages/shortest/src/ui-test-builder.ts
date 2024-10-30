@@ -1,6 +1,8 @@
+import { getConfig } from './index';
 import { AfterFunction, BeforeFunction, TestFunction } from './types';
 
 export class UITestBuilder<T = void> {
+    private path: string;
     private testName: string;
     private testFn?: TestFunction;
     private beforeFn?: BeforeFunction;
@@ -8,8 +10,9 @@ export class UITestBuilder<T = void> {
     private expectations: any;
     private params?: T;
   
-    constructor(name: string) {
-      this.testName = name;
+    constructor(path: string) {
+      this.path = path;
+      this.testName = '';
     }
   
     test(name: string): this {
@@ -35,6 +38,13 @@ export class UITestBuilder<T = void> {
     after(fn: AfterFunction): this {
       this.afterFn = fn;
       return this;
+    }
+  
+    private getUrl(): string {
+      const config = getConfig();
+      const baseUrl = config.baseUrl?.replace(/\/$/, '') || '';
+      const path = this.path.startsWith('/') ? this.path : `/${this.path}`;
+      return `${baseUrl}${path}`;
     }
 }
   

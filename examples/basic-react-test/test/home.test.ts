@@ -26,7 +26,7 @@ define('Authentication Flow', () => {
   });
 
   // Login test
-  const loginTest = new UITestBuilder<LoginParams>('Login Test')
+  const loginTest = new UITestBuilder<LoginParams>('/home')
     .test('User can login with valid credentials')
     .before(async () => {
       // Setup specific to this test
