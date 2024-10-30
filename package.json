@@ -1,0 +1,16 @@
+{
+    "name": "shortest-monorepo",
+    "description": "AI-Powered Testing Framework",
+    "private": true,
+    "type": "module",
+    "scripts": {
+      "build": "pnpm -r build",
+      "test": "pnpm -r test",
+      "lint": "eslint ."
+    },
+    "devDependencies": {
+      "@types/node": "^20.0.0",
+      "typescript": "^5.0.0",
+      "eslint": "^8.0.0"
+    }
+  }
